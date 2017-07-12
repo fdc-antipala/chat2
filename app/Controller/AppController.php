@@ -32,6 +32,10 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 
+	public $helpers = array('Js','Form');
+    public $components = array('Session','RequestHandler');
+    var $uses = array('Users');
+
 	/**
 	 * prints out an array
 	 */
@@ -39,6 +43,10 @@ class AppController extends Controller {
 		echo '<pre>';
 		print_r($arr);
 		echo '</pre>';
+	}
+
+	public function isLogin () {
+		return ($this->Session->read('Users.isLogin') ? true : false);
 	}
 
 }
