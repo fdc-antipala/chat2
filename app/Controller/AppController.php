@@ -31,4 +31,22 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+
+	public $helpers = array('Js','Form');
+    public $components = array('Session','RequestHandler');
+    var $uses = array('Users');
+
+	/**
+	 * prints out an array
+	 */
+	public function _log($arr) {
+		echo '<pre>';
+		print_r($arr);
+		echo '</pre>';
+	}
+
+	public function isLogin () {
+		return ($this->Session->read('Users.isLogin') ? true : false);
+	}
+
 }

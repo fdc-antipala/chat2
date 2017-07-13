@@ -45,8 +45,7 @@ while (true) {
 	foreach ($changed as $changed_socket) {	
 		
 		//check for any incomming data
-		while(socket_recv($changed_socket, $buf, 1024, 0) >= 1)
-		{
+		while(socket_recv($changed_socket, $buf, 1024, 0) >= 1) {
 			$received_text = unmask($buf); //unmask data
 			$tst_msg = json_decode($received_text); //json decode 
 			$user_name = $tst_msg->name; //sender name
@@ -75,11 +74,9 @@ while (true) {
 // close the listening socket
 socket_close($socket);
 
-function send_message($msg)
-{
+function send_message($msg) {
 	global $clients;
-	foreach($clients as $changed_socket)
-	{
+	foreach($clients as $changed_socket) {
 		@socket_write($changed_socket,$msg,strlen($msg));
 	}
 	return true;
@@ -109,8 +106,7 @@ function unmask($text) {
 }
 
 //Encode message for transfer to client.
-function mask($text)
-{
+function mask($text) {
 	$b1 = 0x80 | (0x1 & 0x0f);
 	$length = strlen($text);
 	
@@ -124,15 +120,12 @@ function mask($text)
 }
 
 //handshake new client.
-function perform_handshaking($receved_header,$client_conn, $host, $port)
-{
+function perform_handshaking($receved_header,$client_conn, $host, $port) {
 	$headers = array();
 	$lines = preg_split("/\r\n/", $receved_header);
-	foreach($lines as $line)
-	{
+	foreach($lines as $line) {
 		$line = chop($line);
-		if(preg_match('/\A(\S+): (.*)\z/', $line, $matches))
-		{
+		if(preg_match('/\A(\S+): (.*)\z/', $line, $matches)) {
 			$headers[$matches[1]] = $matches[2];
 		}
 	}
