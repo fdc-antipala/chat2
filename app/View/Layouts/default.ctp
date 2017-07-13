@@ -37,9 +37,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 </head>
 <body>
 	<div id="container">
-		<div id="header">
-			
-		</div>
+		<!-- <div id="header"> -->
+		<!-- </div> -->
 		<div id="content">
 
 			<?php echo $this->Flash->render(); ?>
