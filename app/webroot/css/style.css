@@ -1,22 +1,20 @@
-
 .panel {
 	margin-right: 3px;
 }
 
 .button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
+	background-color: #4CAF50;
+	border: none;
+	color: white;
 	/*margin-right: 30%;   
 	margin-left: 30%;*/
-    text-decoration: none;
-    display: block;
-    font-size: 16px;
-    cursor: pointer;
+	text-decoration: none;
+	display: block;
+	font-size: 16px;
+	cursor: pointer;
 	width: 100%;
-    height: 30px;
+	height: 30px;
 	margin-top: 5px;
-	 
 }
 input[type=text]#name, input[type=text]#message {
 	width:100%;
@@ -47,25 +45,28 @@ input[type=text]#name, input[type=text]#message {
 .user_message{color: #88B6E0;}
 
 @media only screen and (max-width: 720px) {
-    /* For mobile phones: */
-    .chat_wrapper {
-        width: 95%;
+	/* For mobile phones: */
+	.chat_wrapper {
+		width: 95%;
 		height: 40%;
-	}    
+	}
 
 	.button {
 		width:100%;
-		margin-right:auto;   
+		margin-right:auto;
 		margin-left:auto;
 		height:40px;
-	}				
+	}
 }
 
 textarea#message {
-    width: 100%;
-    padding: 1px;
+	width: 100%;
+	padding: 1px;
 }
 
-b {
+b[data-status-flag="0"] {
 	color: gray;
+}
+b[data-status-flag="1"] {
+	color: green;
 }

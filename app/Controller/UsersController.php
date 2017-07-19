@@ -8,6 +8,10 @@ class UsersController extends AppController {
 		if(!$this->isLogin())
 			$this->redirect(array('action' => 'login'));
 
+
+		if (isset($this->request->params['named']['login']) && $this->request->params['named']['login'] == 'true')
+			$this->set('loginSocket', 'login');
+
 		$userlist = $this->Users->find('all');
 		$this->set('userlist', array_column($userlist, 'Users'));
 		$this->set('userID', $this->Session->read('Users.id'));
@@ -42,7 +46,9 @@ class UsersController extends AppController {
 				$this->Session->write('Users.username', $this->request->data['Users']['username']);
 				$this->Session->write('Users.id', $result['Users']['id']);
 
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(array(
+					'controller' => 'users', 'action' => 'index' , 'login' => 'true'
+				));
 
 			}
 		}
@@ -55,18 +61,36 @@ class UsersController extends AppController {
 	public function loginLogout () {
 		$this->autoRender = false;
 
-		// $this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
-		// if ($this->Users->id) {
-		// 	$this->Users->saveField('status', $this->request->data['flag']);
-		// }
+		$this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
+		if ($this->Users->id) {
+			$this->Users->saveField('status', $this->request->data['flag']);
+			$result['result']['flag'] = "success";
+			$result['result']['message'] = "sample message";
+			return json_encode($result);
+		}
 
-
-		echo json_encode($result['result'] = $this->request->data['flag']);
-
+		$result['result']['flag'] = "wala";
+		$result['result']['message'] = "wala message";
+		return json_encode($result);
 	}
 
 	public function logout () {
 		$this->Session->delete('Users.isLogin');
 		$this->redirect(array('action' => 'index'));
+	}
+
+	/**
+	 * Get user status
+	 * 1 = login, 0 = logout
+	 */
+	public function getUserStatus () {
+		
+		$result = $this->Users->find('first', array(
+			'conditions' => array(
+				'username' => $this->request->data['Users']['username'],
+				'password' => $this->request->data['Users']['password']
+			),
+		));
+
 	}
 }

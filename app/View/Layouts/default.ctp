@@ -33,6 +33,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 		echo $this->Html->css('style');
 		echo $this->Html->script('jquery-3.1.1');
+		// echo $this->Html->script('myjs');
 	?>
 </head>
 <body>
