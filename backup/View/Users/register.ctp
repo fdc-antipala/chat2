@@ -11,6 +11,13 @@
 					'class' => 'form-control',
 					'placeholder' => 'Username'
 				),
+				'name' => array(
+					'label' => false,
+					'required' => false,
+					'div' => array('class' => 'form-group'),
+					'class' => 'form-control',
+					'placeholder' => 'Full name'
+				),
 				'password' => array(
 					'label' => false,
 					'required' => false,
@@ -21,7 +28,7 @@
 				'submit' => array(
 					'label' => false,
 					'type' => 'submit',
-					'name' => 'login',
+					'name' => 'register',
 					'div' => array('class' => 'form-group'),
 					'class' => 'form-control'
 				)
@@ -29,6 +36,3 @@
 		?>
 	<?php echo $this->Form->end(); ?>
 </div>
-<!-- <script type="text/javascript">var data = {userID: "<?= $userID; ?>", loginSocket: "<?= $loginSocket; ?>"};</script> -->
-<!-- <script type="text/javascript">var data = {userID: "<?= $userID; ?>", name: "Jo"};</script> -->
-<?php // echo $this->Html->script('sample'); ?>

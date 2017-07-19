@@ -4,17 +4,15 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
 
-	public function index () {
+	public function index ($login = 0) {
 		if(!$this->isLogin())
 			$this->redirect(array('action' => 'login'));
-
-
-		if (isset($this->request->params['named']['login']) && $this->request->params['named']['login'] == 'true')
-			$this->set('loginSocket', 'login');
-
-		$userlist = $this->Users->find('all');
-		$this->set('userlist', array_column($userlist, 'Users'));
-		$this->set('userID', $this->Session->read('Users.id'));
+		
+		$usersList = $this->Users->find('all');
+		$this->set('usersList', $usersList);
+		$this->set('loginNa', '0');
+		if (isset($this->request->query['login']))
+			$this->set('loginNa', $this->request->query['login']);
 	}
 
 	public function register () {
@@ -46,8 +44,17 @@ class UsersController extends AppController {
 				$this->Session->write('Users.username', $this->request->data['Users']['username']);
 				$this->Session->write('Users.id', $result['Users']['id']);
 
+				// update user login status
+				$this->Users->id = $this->Users->field('id', array('id' => $this->Session->read('Users.id')));
+				if ($this->Users->id) {
+					$this->Users->saveField('last_login_time', date("Y-m-d H:i:s"));
+					$this->Users->saveField('status', 1);
+				}
+
 				$this->redirect(array(
-					'controller' => 'users', 'action' => 'index' , 'login' => 'true'
+					'controller' => 'Users', 'action' => 'index', '?' => array(
+						'login' => true
+					)
 				));
 
 			}
@@ -55,42 +62,31 @@ class UsersController extends AppController {
 	}
 
 	/**
-	 * Update user status
-	 * login and logout
+	 * update login
 	 */
-	public function loginLogout () {
-		$this->autoRender = false;
-
-		$this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
-		if ($this->Users->id) {
-			$this->Users->saveField('status', $this->request->data['flag']);
-			$result['result']['flag'] = "success";
-			$result['result']['message'] = "sample message";
-			return json_encode($result);
-		}
-
-		$result['result']['flag'] = "wala";
-		$result['result']['message'] = "wala message";
-		return json_encode($result);
+	public function updateLogin () {
+		
 	}
 
 	public function logout () {
+		// update user login status
+		$this->Users->id = $this->Users->field('id', array('id' => $this->Session->read('Users.id')));
+		if ($this->Users->id) {
+			$this->Users->saveField('status', 0);
+		}
 		$this->Session->delete('Users.isLogin');
 		$this->redirect(array('action' => 'index'));
 	}
 
-	/**
-	 * Get user status
-	 * 1 = login, 0 = logout
-	 */
-	public function getUserStatus () {
-		
-		$result = $this->Users->find('first', array(
+	public function getUsers () {
+		$this->autoRender = false;
+		$users = $this->Users->find('all', array(
 			'conditions' => array(
-				'username' => $this->request->data['Users']['username'],
-				'password' => $this->request->data['Users']['password']
-			),
+				'status' => 1
+			)
 		));
+		header('Content-type: application/json');
+		echo json_encode(array_column($users, 'Users'));
 
 	}
 }

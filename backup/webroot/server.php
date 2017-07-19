@@ -17,7 +17,6 @@ socket_listen($socket);
 //create & add listning socket to the list
 $clients = array($socket);
 
-$users = array();
 //start endless loop, so that our script doesn't stop
 while (true) {
 	//manage multipal connections
@@ -34,8 +33,9 @@ while (true) {
 		perform_handshaking($header, $socket_new, $host, $port); //perform websocket handshake
 		
 		socket_getpeername($socket_new, $ip); //get ip address of connected socket
-		// $response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected'))); //prepare json data
-		// send_message($response); //notify all users about new connection
+		// $response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected')));
+		$response = mask(json_encode(array('type'=>'system', 'message'=>'connected')));
+		send_message($response); //notify all users about new connection
 		
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
@@ -52,15 +52,9 @@ while (true) {
 			$user_name = $tst_msg->name; //sender name
 			$user_message = $tst_msg->message; //message text
 			$user_color = $tst_msg->color; //color
-
-			$id = $tst_msg->id;
-			$name = $tst_msg->name;
-			$type = $tst_msg->type;
-
 			
 			//prepare data to be sent to client
-			// $response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
-			$response_text = mask(json_encode(array('id' => $id, 'name' => $name, 'type' => $type)));
+			$response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
 			send_message($response_text); //send data
 			break 2; //exist this loop
 		}
@@ -73,7 +67,8 @@ while (true) {
 			unset($clients[$found_socket]);
 			
 			//notify all users about disconnected connection
-			$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' disconnected')));
+			// $response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' disconnected')));
+			$response = mask(json_encode(array('type'=>'system', 'message'=>'disconnected')));
 			send_message($response);
 		}
 	}
