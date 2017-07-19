@@ -2,18 +2,18 @@
 	<ul>
 		<?php foreach($userlist as $index => $value): ?>
 			<li>
-				<div>
-					<span style="display: none;" data-id="<?php echo $value['id'] ?>"></span>
-					<b data-id="<?php echo $value['id'] ?>"
-					data-status-flag="<?php echo ($value['status']) ? 1 : 0; ?>">
-						<?php echo $value['name'] ?>
-					</b>
-				</div>
+				<a href="">
+					<div>
+						<span style="display: none;" data-id="<?php echo $value['id'] ?>"></span>
+						<b data-id="<?php echo $value['id'] ?>"
+						data-status-flag="<?php echo ($value['status']) ? 1 : 0; ?>">
+							<?php echo $value['name'] ?>
+						</b>
+					</div>
+				</a>
 			</li>
 		<?php endforeach; ?>
 	</ul>
-	<button id="login">Login</button>
-	<button id="logout">Logout</button>
 </div>
 <?php if (!isset($loginSocket)):
 	$_loginSocket = 'null';

@@ -4,20 +4,12 @@
 		var PATH = window.location.pathname;
 		var BASEURL = ORIGIN + '/chat2/';
 		
-		// var userID = "<?php echo $userID; ?>";
-		// console.log(reqdata.loginSocket);
 		var wsUri = "ws://localhost:9000/chat2/server.php"; 
 		websocket = new WebSocket(wsUri);
 
-		console.log(reqdata.loginSocket);
-		
 		setTimeout(function(){
 			sendMsg(reqdata.loginSocket);
 		},2000);
-
-		$('button#login').click(function(){
-			sendMsg('login');
-		});
 
 		$('a#logout').click(function(){
 			sendMsg('logout');
@@ -30,7 +22,7 @@
 		function sendMsg (type) {
 			//prepare json data
 			var msg = {
-				id: 5,
+				id: reqdata.userID,
 				name: 'John Doe',
 				type: type
 			};
