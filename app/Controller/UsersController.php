@@ -93,4 +93,11 @@ class UsersController extends AppController {
 		));
 
 	}
+
+	/**
+	 * Chat 
+	 */
+	public function chat () {
+		
+	}
 }

@@ -36,7 +36,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		// echo $this->Html->script('myjs');
 	?>
 </head>
-<body>
+<body id="<?php echo $this->params['controller'] . '_' . $this->params['action']; ?>">
 	<div id="container">
 		<!-- <div id="header"> -->
 		<?php if ($this->action !== 'login' && $this->action != 'register'): ?>
