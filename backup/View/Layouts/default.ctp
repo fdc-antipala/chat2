@@ -38,8 +38,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <body>
 	<div id="container">
 		<!-- <div id="header"> -->
-		<?php if ($this->action !== 'login' && $this->action != 'register'): ?>
-		<?php echo $this->element('header'); ?>
+		<?php if ($this->params['action'] != 'login' && $this->params['action'] != 'register'): ?>
+			<?php echo $this->element('header'); ?>
 		<?php endif; ?>
 		<!-- </div> -->
 		<div id="content">

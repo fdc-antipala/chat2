@@ -1,109 +1,99 @@
-<?php 
-$colours = array('007AFF','FF7000','FF7000','15E25F','CFC700','CFC700','CF1100','CF00BE','F00');
-$user_colour = array_rand($colours);
-$username =  $this->Session->read('Users.username');
-?>
-<div class="wrap">
-	<div class="content_header">
-		<div class="top_left">
-			
-		</div>
-		<div class="top_right">
-			
-		</div>
-	</div>
-	<div class="content_body">
-		<div class="convo">
-			
-		</div>
-		<div class="messages">
-			
-		</div>
-	</div>
+<div>
+	<ul>
+		<?php foreach($userlist as $index => $value): ?>
+			<li>
+				<div>
+					<span style="display: none;" data-id="<?php echo $value['id'] ?>"></span>
+					<b data-id="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></b>
+				</div>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<button id="login">Login</button>
+	<button id="logout">Logout</button>
 </div>
+<?php echo $userID; ?>
+<script>
+	(function(){
+		$(document).ready(function(){
+			var HOST = window.location.host;
+			var PATH = window.location.pathname;
+			var BASEURL = HOST + PATH;
+			var userID = "<?php echo $userID; ?>";
+			var wsUri = "ws://localhost:9000/chat2/server.php"; 
+			websocket = new WebSocket(wsUri);
 
+			$('button#login').click(function(){
+				sendMsg('login');
+			});
 
-<div style="display: none;">
-	<h1>Chats</h1>
-	<div class="chat_wrapper">
-		<div class="message_box" id="message_box"></div>
-		<div class="panel">
-		<!-- <input type="text" name="name" id="name" placeholder="Your Name" maxlength="15" /> -->
-
-		<!-- <input type="text" name="message" id="message" placeholder="Message" maxlength="80" 
-		onkeydown = "if (event.keyCode == 13)document.getElementById('send-btn').click()"  /> -->
-		<textarea name="message" id="message" placeholder="Message" onkeydown = "if (event.keyCode == 13)document.getElementById('send-btn').click()"></textarea>
-		</div>
-		<button id="send-btn" class=button>Send</button>
-	</div>
-</div>
-
-
-<script>  
-	$(document).ready(function(){
-		//create a new WebSocket object.
-		var wsUri = "ws://localhost:9000/chat2/server.php"; 	
-		websocket = new WebSocket(wsUri); 
-		var username = "<?php echo $username; ?>";
-		
-		websocket.onopen = function(ev) {
-			$('#message_box').append("<div class=\"system_msg\">Connected!</div>"); //notify user
-		}
-
-		$('#send-btn').click(function() {
-			var mymessage = $('#message').val();
-			var myname = $('#name').val();
+			$('button#logout').click(function(){
+				sendMsg('logout');
+			});
 			
-			// if(myname == "") {
-			// 	alert("Enter your Name please!");
-			// 	return;
-			// }
-			// if(mymessage == "") {
-			// 	alert("Enter Some message Please!");
-			// 	return;
-			// }
+			websocket.onopen = function(ev) {
+				console.log('onopen');
+			}
 
-			// $('#name').css("visibility","hidden");
+			function sendMsg (type) {
+				//prepare json data
+				var msg = {
+					id: userID,
+					name: 'John Doe',
+					type: type
+				};
+				//convert and send data to server
+				websocket.send(JSON.stringify(msg));
+			}
+
 			
-			var objDiv = $('#message_box');
-			objDiv.scrollTop = objDiv.scrollHeight;
-			//prepare json data
-			var msg = {
-				message: mymessage,
-				name: username,
-				color : '<?php echo $colours[$user_colour]; ?>'
+			//#### Message received from server?
+			websocket.onmessage = function(ev) {
+				console.log('on message');
+				var msg = JSON.parse(ev.data); //PHP sends Json data
+				// console.log(msg.id);
+				// console.log(msg.name);
+				// console.log(msg.type);
+
+				if (msg.type == 'login'){
+					$('b').find('');
+					$('b[data-id="' + msg.id +'"]').css('color', 'green');
+					ajaCall('login', msg.id);
+
+				}
+				if (msg.type == 'logout'){
+					$('b').find('');
+					$('b[data-id="' + msg.id +'"]').css('color', 'gray');
+					ajaCall('logout', msg.id);
+				}
 			};
-			//convert and send data to server
-			websocket.send(JSON.stringify(msg));
-		});
-		
-		//#### Message received from server?
-		websocket.onmessage = function(ev) {
-			console.log(ev);
-			var msg = JSON.parse(ev.data);
-			var type = msg.type;
-			var umsg = msg.message;
-			var uname = msg.name;
-			var ucolor = msg.color;
 
-			if(type == 'usermsg') {
-				$('#message_box').append("<div><span class=\"user_name\" style=\"color:#"+ucolor+"\">"+uname+"</span> : <span class=\"user_message\">"+umsg+"</span></div>");
-			}
-			if(type == 'system') {
-				$('#message_box').append("<div class=\"system_msg\">"+umsg+"</div>");
+			function ajaCall (flag, userID) {
+				$.ajax({
+					// url : BASEURL + 'users/loginLogout',
+					url : 'http://localhost:8012/chat2/users/loginLogout',
+					type : 'POST',
+					dataType : 'JSON',
+					data : {
+						'flag': flag,
+						'userID': userID
+					},
+					success : function (data) {
+						console.log(data);
+					},
+					error: function (e) {
+						console.log('error');
+					},
+
+				});
 			}
 			
-			$('#message').val(''); //reset text
-			
-			var objDiv = $('#message_box');
-			objDiv.scrollTop = objDiv.scrollHeight;
-		};
-		
-		websocket.onerror = function(ev){
-			$('#message_box').append("<div class=\"system_error\">Error Occurred - "+ev.data+"</div>");
-		}; 
-		websocket.onclose = function(ev){
-			$('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");
-		}; 
-	});
+			websocket.onerror = function(ev){
+				console.log('error');
+			}; 
+			websocket.onclose = function(ev){
+				console.log('error');
+			}; 
+		});
+	})();
 </script>

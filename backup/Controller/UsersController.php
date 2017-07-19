@@ -4,13 +4,15 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
 
-	public function index () {
+	public function index ($login = 0) {
 		if(!$this->isLogin())
 			$this->redirect(array('action' => 'login'));
-
-		$userlist = $this->Users->find('all');
-		$this->set('userlist', array_column($userlist, 'Users'));
-		$this->set('userID', $this->Session->read('Users.id'));
+		
+		$usersList = $this->Users->find('all');
+		$this->set('usersList', $usersList);
+		$this->set('loginNa', '0');
+		if (isset($this->request->query['login']))
+			$this->set('loginNa', $this->request->query['login']);
 	}
 
 	public function register () {
@@ -42,31 +44,49 @@ class UsersController extends AppController {
 				$this->Session->write('Users.username', $this->request->data['Users']['username']);
 				$this->Session->write('Users.id', $result['Users']['id']);
 
-				$this->redirect(array('action' => 'index'));
+				// update user login status
+				$this->Users->id = $this->Users->field('id', array('id' => $this->Session->read('Users.id')));
+				if ($this->Users->id) {
+					$this->Users->saveField('last_login_time', date("Y-m-d H:i:s"));
+					$this->Users->saveField('status', 1);
+				}
+
+				$this->redirect(array(
+					'controller' => 'Users', 'action' => 'index', '?' => array(
+						'login' => true
+					)
+				));
 
 			}
 		}
 	}
 
 	/**
-	 * Update user status
-	 * login and logout
+	 * update login
 	 */
-	public function loginLogout () {
-		$this->autoRender = false;
-
-		// $this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
-		// if ($this->Users->id) {
-		// 	$this->Users->saveField('status', $this->request->data['flag']);
-		// }
-
-
-		echo json_encode($result['result'] = $this->request->data['flag']);
-
+	public function updateLogin () {
+		
 	}
 
 	public function logout () {
+		// update user login status
+		$this->Users->id = $this->Users->field('id', array('id' => $this->Session->read('Users.id')));
+		if ($this->Users->id) {
+			$this->Users->saveField('status', 0);
+		}
 		$this->Session->delete('Users.isLogin');
 		$this->redirect(array('action' => 'index'));
+	}
+
+	public function getUsers () {
+		$this->autoRender = false;
+		$users = $this->Users->find('all', array(
+			'conditions' => array(
+				'status' => 1
+			)
+		));
+		header('Content-type: application/json');
+		echo json_encode(array_column($users, 'Users'));
+
 	}
 }
