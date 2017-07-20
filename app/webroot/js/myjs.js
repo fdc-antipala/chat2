@@ -12,6 +12,7 @@
 				// cad
 			}
 		}
+		// new jo -0720
 
 		//Increment the idle time counter every minute.
 		var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
