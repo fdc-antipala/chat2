@@ -6,7 +6,6 @@
 		function timerIncrement() {
 			idleTime = idleTime + 1;
 			if (idleTime > 10) { // 5 minutes
-				// ajaCall(0, reqdata.userID);
 				sendMsg('logout');
 			}
 		}
