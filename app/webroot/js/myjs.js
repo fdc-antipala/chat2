@@ -29,16 +29,19 @@
 		websocket = new WebSocket(wsUri);
 		console.log(reqdata.userID);
 
-		// setTimeout(function(){
-		// 	sendMsg(reqdata.loginSocket);
-		// 	// updateLastOnline();
-		// },3000);
+		setTimeout(function(){
+			console.log('log');
+			sendMsg(reqdata.loginSocket);
+			updateLastOnline();
+		},2000);
 		$('body').click(function(){
 			sendMsg('login');
 		});
 		
 
-		$('a#logout').click(function(){
+		$('a#logout').click(function(e){
+			// ajaCall(0, reqdata.userID);
+			e.preventDefault();
 			sendMsg('logout');
 		});
 		
