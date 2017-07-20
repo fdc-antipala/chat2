@@ -15,6 +15,7 @@ class UsersController extends AppController {
 		$userlist = $this->Users->find('all');
 		$this->set('userlist', array_column($userlist, 'Users'));
 		$this->set('userID', $this->Session->read('Users.id'));
+		$this->set('userName', $this->Session->read('Users.username'));
 	}
 
 	public function register () {
@@ -59,6 +60,9 @@ class UsersController extends AppController {
 	 * login and logout
 	 */
 	public function loginLogout () {
+		$this->log('============');
+		$this->log('===' . $this->request->data['from'] . '===');
+		$this->log('============');
 		$this->autoRender = false;
 
 		$this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
@@ -95,9 +99,24 @@ class UsersController extends AppController {
 	}
 
 	/**
+	 * Update user last login time...
+	 */
+	public function updateLastOnline () {
+		$this->autoRender = false;
+		date_default_timezone_set('Asia/Manila');
+		$this->Users->id = $this->Users->field('id', array('id' => $this->request->data['userID']));
+		if ($this->Users->id) {
+			$this->Users->saveField('last_login_time', date("Y-m-d H:i:s"));
+			$result['result']['flag'] = "success";
+			$result['result']['message'] = "sample message";
+			return json_encode($result);
+		}
+	}
+
+	/**
 	 * Chat 
 	 */
 	public function chat () {
-		
+
 	}
 }
