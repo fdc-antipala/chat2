@@ -2,24 +2,24 @@
 	
 	$(document).ready(function(){
 
-		var idleTime = 0;
-		function timerIncrement() {
-			idleTime = idleTime + 1;
-			if (idleTime > 10) { // 5 minutes
-				sendMsg('logout');
-			}
-		}
+		// var idleTime = 0;
+		// function timerIncrement() {
+		// 	idleTime = idleTime + 1;
+		// 	if (idleTime > 10) { // 5 minutes
+		// 		sendMsg('logout');
+		// 	}
+		// }
 
-		//Increment the idle time counter every minute.
-		var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+		// //Increment the idle time counter every minute.
+		// var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
-		//Zero the idle timer on mouse movement.
-		$(this).mousemove(function (e) {
-		idleTime = 0;
-		});
-		$(this).keypress(function (e) {
-			idleTime = 0;
-		});
+		// //Zero the idle timer on mouse movement.
+		// $(this).mousemove(function (e) {
+		// idleTime = 0;
+		// });
+		// $(this).keypress(function (e) {
+		// 	idleTime = 0;
+		// });
 
 		var ORIGIN = window.location.origin;
 		var PATH = window.location.pathname;
@@ -29,15 +29,14 @@
 		websocket = new WebSocket(wsUri);
 		console.log(reqdata.userID);
 
-		updateLastOnline();
-		setTimeout(function(){
-			sendMsg(reqdata.loginSocket);
-		},2000);
-
-		setTimeout(function(){
-
-		},5 * 60 * 1000);
-
+		// setTimeout(function(){
+		// 	sendMsg(reqdata.loginSocket);
+		// 	// updateLastOnline();
+		// },3000);
+		$('body').click(function(){
+			sendMsg('login');
+		});
+		
 
 		$('a#logout').click(function(){
 			sendMsg('logout');
@@ -52,10 +51,12 @@
 			var msg = {
 				id: reqdata.userID,
 				name: 'John Doe',
-				type: type,
+				type: type
 			};
 			//convert and send data to server
-			websocket.send(JSON.stringify(msg));
+			// websocket.onopen = function () {
+				websocket.send(JSON.stringify(msg));
+			// }
 		}
 
 		/**
@@ -65,7 +66,6 @@
 		websocket.onmessage = function(ev) {
 			console.log('on message');
 			var msg = JSON.parse(ev.data);
-			console.log(msg.id);
 			if (msg.type == 'login'){
 				$('b').find('');
 				$('b[data-id="' + msg.id +'"]').css('color', 'green');

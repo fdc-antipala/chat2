@@ -129,3 +129,8 @@ input.form-control.btn.btn-success {
 	border-radius: 17px;
 	width: 220px;
 }
+
+.form-login input {
+	width: 395px !important;
+	margin: auto;
+}
