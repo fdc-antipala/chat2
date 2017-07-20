@@ -7,12 +7,8 @@
 			idleTime = idleTime + 1;
 			if (idleTime > 10) { // 5 minutes
 				sendMsg('logout');
-				// testetsets
-				// gg branch
-				// cad
 			}
 		}
-		// new jo -0720
 
 		//Increment the idle time counter every minute.
 		var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
@@ -24,7 +20,6 @@
 		$(this).keypress(function (e) {
 			idleTime = 0;
 		});
-		// new 123
 
 		var ORIGIN = window.location.origin;
 		var PATH = window.location.pathname;
