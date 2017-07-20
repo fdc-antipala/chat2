@@ -70,3 +70,62 @@ b[data-status-flag="0"] {
 b[data-status-flag="1"] {
 	color: green;
 }
+
+b[data-flag="offline"] {
+	/*color: gray !important;*/
+}
+
+#container {
+	padding: 1em;
+}
+
+#content {
+	padding: 2em;
+}
+
+div#container {
+	width: 100%;
+	max-width: 1024px;
+	min-width: 960px;
+	margin: auto;
+}
+
+.left {
+	background-color: #E3F2FD;
+	/*width: 40%;
+	float: left;*/
+}
+.right {
+	background-color: #FFF;
+	/*width: 60%;
+	float: left;*/
+}
+
+/********
+	HEADER
+*********/
+header nav ul, #content ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+hr {
+	padding: 0;
+	margin: 0;
+}
+header nav ul li {
+	display: inline-block;
+	margin-right: 5px;
+}
+
+/***************
+	Login
+***************/
+.form-login {
+	text-align: center;
+}
+input.form-control.btn.btn-success {
+	background: #1565C0;
+	border-radius: 17px;
+	width: 220px;
+}
