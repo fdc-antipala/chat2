@@ -20,6 +20,7 @@ $clients = array($socket);
 $users = array();
 //start endless loop, so that our script doesn't stop
 while (true) {
+
 	//manage multipal connections
 	$changed = $clients;
 	//returns the socket resources in $changed array
@@ -71,8 +72,8 @@ while (true) {
 			$found_socket = array_search($changed_socket, $clients);
 			socket_getpeername($changed_socket, $ip);
 			unset($clients[$found_socket]);
-			
 			//notify all users about disconnected connection
+			echo 'asdfas';
 			$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' disconnected')));
 			send_message($response);
 		}

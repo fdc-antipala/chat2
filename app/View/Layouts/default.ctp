@@ -25,6 +25,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $cakeDescription ?>:
 		<?php echo $this->fetch('title'); ?>
 	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->fetch('meta');
@@ -32,11 +33,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->fetch('script');
 
 		echo $this->Html->css('style');
+		echo $this->Html->css('bootstrap.min');
 		echo $this->Html->script('jquery-3.1.1');
+		// echo $this->Html->script('bootstrap.min');
 		// echo $this->Html->script('myjs');
 	?>
 </head>
-<body>
+<body id="<?php echo $this->params['controller'] . '_' . $this->params['action']; ?>">
 	<div id="container">
 		<!-- <div id="header"> -->
 		<?php if ($this->action !== 'login' && $this->action != 'register'): ?>
