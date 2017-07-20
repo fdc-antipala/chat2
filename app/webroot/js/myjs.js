@@ -8,6 +8,7 @@
 			if (idleTime > 10) { // 5 minutes
 				sendMsg('logout');
 				// testetsets
+				// gg branch
 			}
 		}
 
