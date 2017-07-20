@@ -24,6 +24,7 @@
 		$(this).keypress(function (e) {
 			idleTime = 0;
 		});
+		// new 123
 
 		var ORIGIN = window.location.origin;
 		var PATH = window.location.pathname;
